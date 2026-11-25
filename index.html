@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#001529">
   <title>运营看板 · 新航道4R系统</title>
-  <link rel="stylesheet" href="./styles.css?v=8351827c0e">
+  <link rel="stylesheet" href="./styles.css?v=f25430a6ab">
   <script defer src="./catalog.js"></script>
   <script defer src="./data.js?v=4ad9e24b57"></script>
   <script defer src="./app.js?v=7f2eb85bc3"></script>
@@ -84,7 +84,24 @@
 
         <div id="overview-view">
           <section class="card kpi-section" aria-labelledby="kpi-heading">
-            <div class="card-header"><h2 id="kpi-heading">访问指标</h2></div>
+            <div class="card-header">
+              <h2 id="kpi-heading">访问指标</h2>
+              <button class="kpi-help-trigger" type="button" popovertarget="kpi-help">指标说明</button>
+              <div class="kpi-help" id="kpi-help" popover role="region" aria-labelledby="kpi-help-heading">
+                <h3 id="kpi-help-heading">指标说明</h3>
+                <dl>
+                  <dt>页面访问量（PV）</dt>
+                  <dd>页面成功打开的总次数。同一个账号打开同一页面 3 次，就计 3 次。</dd>
+                  <dt>独立访客（UV）</dt>
+                  <dd>所选范围内访问过的账号数。同一端的同一账号无论访问几次，只计 1 人。教师端和学生端分别统计。</dd>
+                  <dt>有效曝光</dt>
+                  <dd>页面首屏的主要内容至少有一半连续可见满 1 秒，就计 1 次。每次访问最多计 1 次。</dd>
+                  <dt>核心功能点击</dt>
+                  <dd>纳入统计的按钮或页签被点击的总次数，例如学生点击「进入作业」。</dd>
+                </dl>
+                <p>卡片底部的百分比表示与前一段相同天数相比的变化。例如选近 7 天，就与紧邻的前 7 天比较。</p>
+              </div>
+            </div>
             <div class="kpi-grid" id="kpis"></div>
           </section>
           <div class="overview-charts">
