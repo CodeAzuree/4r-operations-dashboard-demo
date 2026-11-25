@@ -8,16 +8,17 @@ const $ = selector => document.querySelector(selector)
 const $$ = selector => [...document.querySelectorAll(selector)]
 
 const viewNames = {
-  overview: ['运营看板', '掌握教师端与学生端的访问表现，追踪核心功能的使用情况。'],
-  pages: ['页面分析', '按教师端和学生端实际菜单查看页面访问与有效曝光。'],
-  features: ['功能分析', '按所属页面查看核心按钮的曝光、点击与业务结果。']
+  overview: { label: '访问概览', title: '运营看板', description: '查看教师端和学生端的访问与核心功能使用情况。', icon: 'dashboard' },
+  pages: { label: '页面分析', description: '按实际菜单查看两端页面访问与有效曝光。', icon: 'pages' },
+  features: { label: '功能分析', description: '按所属页面查看按钮曝光、点击与业务结果。', icon: 'activity' }
 }
+const visitedViews = new Set(['overview'])
 
 const indicators = [
   { key: 'pv', label: '页面访问量', unit: 'PV', icon: 'pages', color: 'blue', definition: '统计期内成功进入业务页面的总次数' },
-  { key: 'uv', label: '独立访客', unit: 'UV', icon: 'users', color: 'teal', definition: '按访问端和登录账号在统计期内去重' },
-  { key: 'exposure', label: '有效曝光', icon: 'eye', color: 'violet', definition: '页面主体至少有一半连续可见 1 秒的访问次数' },
-  { key: 'click', label: '核心功能点击', icon: 'cursor', color: 'amber', definition: '清单内核心按钮和功能的点击总次数' }
+  { key: 'uv', label: '独立访客', unit: 'UV', icon: 'users', color: 'green', definition: '按访问端和登录账号在统计期内去重' },
+  { key: 'exposure', label: '有效曝光', icon: 'eye', color: 'amber', definition: '页面主体至少有一半连续可见 1 秒的访问次数' },
+  { key: 'click', label: '核心功能点击', icon: 'cursor', color: 'violet', definition: '清单内核心按钮和功能的点击总次数' }
 ]
 
 const state = {
@@ -48,7 +49,6 @@ const iconPaths = {
   cursor: 'M6 3l13 10-6 1-3 6L6 3z M4 9l-2 2 M11 3l2-2',
   calendar: 'M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z M3 10h18 M8 3v4 M16 3v4 M8 14h2 M14 14h2',
   chevronDown: 'M6 9l6 6 6-6',
-  chevronRight: 'M9 6l6 6-6 6',
   book: 'M12 6c-2-2-5-3-9-2v14c4-1 7 0 9 2 2-2 5-3 9-2V4c-4-1-7 0-9 2z M12 6v14',
   external: 'M12 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-6 M14 4h6v6 M20 4l-9 9',
   close: 'M6 6l12 12 M18 6L6 18',
@@ -58,7 +58,7 @@ const iconPaths = {
 function drawIcons(container = document) {
   for (const icon of container.querySelectorAll('[data-icon]:empty')) {
     const name = icon.dataset.icon
-    const size = ['chevronDown', 'chevronRight', 'external'].includes(name) ? 13 : 17
+    const size = ['chevronDown', 'external'].includes(name) ? 13 : 17
     const canvas = document.createElement('canvas')
     const dpr = window.devicePixelRatio || 1
     canvas.width = Math.round(size * dpr)
@@ -90,8 +90,8 @@ function renderKpis() {
     const change = comparison ? (current.totals[key] - comparison) / comparison * 100 : null
     const difference = change === null ? '—' : (change > 0 ? '+' : '') + change.toFixed(1) + '%'
     return `<article class="kpi-card accent-${color}" title="${definition}">
-      <div class="kpi-label">${label}${unit ? '<small>' + unit + '</small>' : ''}</div>
       <span class="kpi-icon"><span data-icon="${icon}"></span></span>
+      <div class="kpi-label">${label}${unit ? '<small>' + unit + '</small>' : ''}</div>
       <strong class="kpi-value">${format(current.totals[key])}</strong>
       <div class="kpi-foot"><strong class="${change > 0 ? 'positive' : change < 0 ? 'negative' : ''}">${difference}</strong><span>较上一等长周期</span></div>
     </article>`
@@ -164,8 +164,8 @@ function renderChart() {
   ]))
   chartFrame = { xStart, xEnd, dayCount, width }
 
-  ctx.fillStyle = '#61728a'
-  ctx.strokeStyle = '#e5ebf5'
+  ctx.fillStyle = '#606266'
+  ctx.strokeStyle = '#e4e7ed'
   ctx.textAlign = 'right'
   ctx.textBaseline = 'middle'
   for (let tick = 0; tick <= maximum; tick += step) {
@@ -210,7 +210,7 @@ function renderChart() {
 
   const selected = state.selectedDay
   if (selected !== null) {
-    ctx.strokeStyle = '#a6b8d2'
+    ctx.strokeStyle = '#a8abb2'
     ctx.lineWidth = 1
     ctx.setLineDash([3, 4])
     ctx.beginPath()
@@ -492,9 +492,18 @@ function showView(focus) {
     link.querySelector('[data-icon]').replaceChildren()
     drawIcons(link)
   }
-  const [title, description] = viewNames[state.view]
+  const { label, title = label, description } = viewNames[state.view]
+  $('#breadcrumb-view').textContent = label
   $('#page-title').textContent = title
   $('#page-description').textContent = description
+  visitedViews.add(state.view)
+  const tabs = $('#workspace-tabs')
+  tabs.innerHTML = [...visitedViews].map(view => {
+    const tab = viewNames[view]
+    const selected = view === state.view ? ' aria-current="page"' : ''
+    return `<a class="workspace-tab" href="#${view}"${selected}><span data-icon="${tab.icon}"></span>${tab.label}</a>`
+  }).join('')
+  drawIcons(tabs)
   renderActiveView()
   if (focus) {
     window.scrollTo(0, 0)

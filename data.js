@@ -1,7 +1,7 @@
 const OPS_DATA = (() => {
   const roles = {
-    teacher: { label: '教师端', color: '#2c77ee', pool: 390, daily: 160, week: [1.02, 1.04, .92, .56, .48, 1.12, 1.16] },
-    student: { label: '学生端', color: '#169d99', pool: 1480, daily: 670, week: [1.00, 1.08, .88, .69, .83, 1.14, 1.24] }
+    teacher: { label: '教师端', color: '#409eff', pool: 390, daily: 160, week: [1.02, 1.04, .92, .56, .48, 1.12, 1.16] },
+    student: { label: '学生端', color: '#67c23a', pool: 1480, daily: 670, week: [1.00, 1.08, .88, .69, .83, 1.14, 1.24] }
   }
 
   const { pages: catalog, exposureOnly } = OPS_CATALOG

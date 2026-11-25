@@ -3,19 +3,19 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f4f7fb">
+  <meta name="theme-color" content="#001529">
   <title>运营看板 · 新航道4R系统</title>
-  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./styles.css?v=8351827c0e">
   <script defer src="./catalog.js"></script>
-  <script defer src="./data.js"></script>
-  <script defer src="./app.js"></script>
+  <script defer src="./data.js?v=4ad9e24b57"></script>
+  <script defer src="./app.js?v=7f2eb85bc3"></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">跳到主要内容</a>
   <div class="app-shell">
     <aside class="sidebar">
       <a class="brand" href="#overview">
-        <span class="brand-mark"><i></i><i></i><i></i></span>
+        <img class="brand-mark" src="./logo.png" width="40" height="40" alt="">
         <span>新航道4R系统</span>
       </a>
       <nav class="primary-nav" aria-label="运营看板">
@@ -28,57 +28,65 @@
     </aside>
 
     <div class="workspace">
-      <header class="topbar">
-        <div class="breadcrumb" aria-label="当前位置"><span>运营中心</span><span data-icon="chevronRight"></span><strong>运营看板</strong></div>
-        <div class="demo-status"><span></span>模拟数据</div>
+      <header class="workspace-header">
+        <div class="topbar">
+          <div class="breadcrumb" aria-label="当前位置"><span class="breadcrumb-root"><span data-icon="dashboard"></span>运营看板</span><span aria-hidden="true">/</span><strong id="breadcrumb-view">访问概览</strong></div>
+          <div class="demo-status">模拟数据</div>
+        </div>
+        <nav class="workspace-tabs" id="workspace-tabs" aria-label="已打开的看板页面"></nav>
       </header>
 
       <main class="main-content" id="main-content">
-        <header class="page-heading">
-          <h1 id="page-title" tabindex="-1">运营看板</h1>
-          <p id="page-description">掌握教师端与学生端的访问表现，追踪核心功能的使用情况。</p>
-        </header>
+        <section class="card page-controls" aria-labelledby="page-title">
+          <header class="page-heading">
+            <div class="page-title-row"><span class="heading-icon" data-icon="dashboard"></span><h1 id="page-title" tabindex="-1">运营看板</h1></div>
+            <p id="page-description">查看教师端和学生端的访问与核心功能使用情况。</p>
+          </header>
 
-        <section class="filter-bar" aria-label="数据筛选">
-          <div class="filter-scope">
-            <span class="filter-label">访问端</span>
-            <div class="segments role-switch" role="group" aria-label="访问端">
-              <button type="button" data-role="all" aria-pressed="true">全部</button>
-              <button type="button" data-role="teacher" aria-pressed="false">教师端</button>
-              <button type="button" data-role="student" aria-pressed="false">学生端</button>
-            </div>
-            <label class="select-control menu-select">
-              <span class="visually-hidden">一级菜单</span>
-              <select id="menu-filter"><option value="">全部一级菜单</option></select>
-              <span data-icon="chevronDown"></span>
-            </label>
-          </div>
-          <div class="filter-date">
-            <span class="time-zone">北京时间</span>
-            <button class="date-trigger" id="date-trigger" type="button" popovertarget="date-panel">
-              <span data-icon="calendar"></span><span id="date-label">11.18 – 11.24</span><span data-icon="chevronDown"></span>
-            </button>
-            <div class="date-panel" id="date-panel" popover aria-labelledby="date-heading">
-              <h2 id="date-heading">统计周期</h2>
-              <div class="date-presets" aria-label="快捷周期">
-                <button type="button" data-days="7" aria-pressed="true">近 7 天</button>
-                <button type="button" data-days="14" aria-pressed="false">近 14 天</button>
-                <button type="button" data-days="30" aria-pressed="false">近 30 天</button>
+          <div class="filter-bar" role="group" aria-label="数据筛选">
+            <div class="filter-scope">
+              <span class="filter-label">访问端</span>
+              <div class="segments role-switch" role="group" aria-label="访问端">
+                <button type="button" data-role="all" aria-pressed="true">全部</button>
+                <button type="button" data-role="teacher" aria-pressed="false">教师端</button>
+                <button type="button" data-role="student" aria-pressed="false">学生端</button>
               </div>
-              <form id="date-form">
-                <div class="date-fields">
-                  <label>开始日期<input type="date" id="date-start" required></label>
-                  <label>结束日期<input type="date" id="date-end" required></label>
+              <label class="select-control menu-select">
+                <span class="visually-hidden">一级菜单</span>
+                <select id="menu-filter"><option value="">全部一级菜单</option></select>
+                <span data-icon="chevronDown"></span>
+              </label>
+            </div>
+            <div class="filter-date">
+              <span class="time-zone">北京时间</span>
+              <button class="date-trigger" id="date-trigger" type="button" popovertarget="date-panel">
+                <span data-icon="calendar"></span><span id="date-label">11.18 – 11.24</span><span data-icon="chevronDown"></span>
+              </button>
+              <div class="date-panel" id="date-panel" popover aria-labelledby="date-heading">
+                <h2 id="date-heading">统计周期</h2>
+                <div class="date-presets" aria-label="快捷周期">
+                  <button type="button" data-days="7" aria-pressed="true">近 7 天</button>
+                  <button type="button" data-days="14" aria-pressed="false">近 14 天</button>
+                  <button type="button" data-days="30" aria-pressed="false">近 30 天</button>
                 </div>
-                <p class="date-note">可选范围为 2026.10.26 至 2026.11.24。</p>
-                <button class="primary-button" type="submit">应用日期</button>
-              </form>
+                <form id="date-form">
+                  <div class="date-fields">
+                    <label>开始日期<input type="date" id="date-start" required></label>
+                    <label>结束日期<input type="date" id="date-end" required></label>
+                  </div>
+                  <p class="date-note">可选范围为 2026.10.26 至 2026.11.24。</p>
+                  <button class="primary-button" type="submit">应用日期</button>
+                </form>
+              </div>
             </div>
           </div>
         </section>
 
         <div id="overview-view">
-          <section class="kpi-grid" id="kpis" aria-label="核心访问指标"></section>
+          <section class="card kpi-section" aria-labelledby="kpi-heading">
+            <div class="card-header"><h2 id="kpi-heading">访问指标</h2></div>
+            <div class="kpi-grid" id="kpis"></div>
+          </section>
           <div class="overview-charts">
             <section class="card trend-card" aria-labelledby="trend-heading">
               <div class="card-header">
